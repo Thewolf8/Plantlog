@@ -19,7 +19,7 @@ jobs:
       - name: ⬇️ Checkout repository
         uses: actions/checkout@v4
 
-      # ── 2. إعداد بيئة جافا 21 (تم حذف الكاش لتجنب خطأ التعارض في أول بناء) ──
+      # ── 2. إعداد بيئة جافا 21 ──────────────────────────────────
       - name: ☕ Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -33,15 +33,13 @@ jobs:
           node-version: '22'
           cache: npm
 
-      # ── 4. تثبيت المكتبات وتوجيهها إجبارياً للمستودع العالمي الرسمي ──
+      # ── 4. تثبيت المكتبات وحزم كاباسيتور أندرويد إجبارياً ───────
       - name: 📦 Install npm dependencies
         run: |
           npm install -g npm@latest
           rm -f .npmrc package-lock.json
           npm install --registry=https://registry.npmjs.org/ --legacy-peer-deps
-
-      - name: 🔧 Install Capacitor CLI v8
-        run: npm install --no-save @capacitor/cli@^8 --registry=https://registry.npmjs.org/
+          npm install @capacitor/core@^8 @capacitor/android@^8 @capacitor/cli@^8 --registry=https://registry.npmjs.org/ --legacy-peer-deps
 
       # ── 5. بناء تطبيق React ───────────────────────────────────
       - name: 🔨 Build web app
@@ -51,9 +49,11 @@ jobs:
       - name: 🔄 Capacitor sync → Android
         run: npx cap sync android
 
-      # ── 7. توليد أيقونات التطبيق من الـ Assets ──────────────────
+      # ── 7. توليد أيقونات التطبيق وحذف التكرار الافتراضي ────────
       - name: 🎨 Generate app icons from Assets
         run: |
+          # حذف الملف الافتراضي المتكرر لمنع تعارض مدمج أندرويد (Resource Merger)
+          rm -f android/app/src/main/res/values/ic_launcher_background.xml
           npm install @capacitor/assets --registry=https://registry.npmjs.org/
           npx @capacitor/assets generate --android
 
