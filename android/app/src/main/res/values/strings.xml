@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">PlantLog</string>
+    <string name="title_activity_main">PlantLog</string>
+    <string name="package_name">com.plantlog.journal</string>
+    <string name="custom_url_scheme">com.plantlog.journal</string>
+</resources>

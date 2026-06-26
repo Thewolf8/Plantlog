@@ -1,0 +1,19 @@
+{
+  "appId": "com.plantlog.journal",
+  "appName": "PlantLog",
+  "webDir": "public",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "backgroundColor": "#0a1a0e",
+      "androidScaleType": "CENTER_CROP"
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_plantlog",
+      "iconColor": "#22c55e"
+    }
+  }
+}
