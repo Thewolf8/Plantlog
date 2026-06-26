@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sprout, Droplets, Sun, Thermometer, SlidersHorizontal } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Sprout, Droplets, Sun, Thermometer } from 'lucide-react';
+
 import { usePlants } from '@/hooks/usePlants';
 import { useJournal } from '@/hooks/useJournal';
 import { usePhotos } from '@/hooks/usePhotos';
@@ -11,7 +11,7 @@ import PlantCard from '@/components/PlantCard';
 import StatCard from '@/components/StatCard';
 import FloatingActionButton from '@/components/FloatingActionButton';
 import Header from '@/components/Header';
-import { cn } from '@/lib/utils';
+
 
 type FilterMode = 'all' | 'climate' | 'watered';
 
@@ -20,7 +20,7 @@ export default function DashboardPage() {
   const { plants, climateDefiancePlants } = usePlants();
   const { entries: allEntries } = useJournal();
   const { photos } = usePhotos();
-  const { t, isRTL } = useI18n();
+  const { t } = useI18n();
   const [filter, setFilter] = useState<FilterMode>('all');
 
   const last7Days = getLast7Days();
@@ -70,12 +70,8 @@ export default function DashboardPage() {
   }, [photos, plants]);
 
   return (
-    <div className={cn('pb-24', isRTL && 'direction-rtl')}>
-      <Header rightAction={
-        <Button variant="ghost" size="sm" className="text-muted-foreground">
-          <SlidersHorizontal className="w-4 h-4" />
-        </Button>
-      } />
+    <div className="pb-24">
+      <Header />
 
       <div className="p-4 space-y-4">
         {/* Stats */}
