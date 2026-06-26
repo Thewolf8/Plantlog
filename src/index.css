@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Botanical Light (high-contrast outdoor mode) */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 5%;
+    --card: 0 0% 97%;
+    --card-foreground: 0 0% 5%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 5%;
+    --primary: 142 72% 29%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 150 20% 93%;
+    --secondary-foreground: 0 0% 5%;
+    --muted: 150 20% 93%;
+    --muted-foreground: 150 10% 40%;
+    --accent: 90 60% 35%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 150 15% 80%;
+    --input: 150 15% 80%;
+    --ring: 142 60% 45%;
+    --radius: 0.75rem;
+
+    /* Custom plant tokens */
+    --plant-50: 138 76% 97%;
+    --plant-100: 141 84% 93%;
+    --plant-200: 141 79% 85%;
+    --plant-300: 142 69% 58%;
+    --plant-400: 142 69% 45%;
+    --plant-500: 142 61% 35%;
+    --plant-600: 143 64% 24%;
+    --plant-700: 143 61% 20%;
+    --plant-800: 144 60% 16%;
+    --plant-900: 145 61% 10%;
+    --plant-950: 144 87% 4%;
+  }
+
+  .dark {
+    /* Botanical Dark */
+    --background: 150 15% 6%;
+    --foreground: 120 20% 90%;
+    --card: 150 12% 10%;
+    --card-foreground: 120 20% 90%;
+    --popover: 150 12% 10%;
+    --popover-foreground: 120 20% 90%;
+    --primary: 142 60% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 150 10% 18%;
+    --secondary-foreground: 120 20% 90%;
+    --muted: 150 10% 18%;
+    --muted-foreground: 120 10% 60%;
+    --accent: 90 50% 40%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 150 12% 22%;
+    --input: 150 12% 22%;
+    --ring: 142 60% 45%;
+  }
+
+  .high-contrast {
+    --foreground: 0 0% 0%;
+    --muted-foreground: 0 0% 20%;
+  }
+
+  .dark.high-contrast {
+    --foreground: 0 0% 100%;
+    --muted-foreground: 0 0% 80%;
+  }
+
+  /* AMOLED — pure black for OLED screens */
+  .amoled {
+    --background: 0 0% 0%;
+    --foreground: 120 20% 92%;
+    --card: 0 0% 3%;
+    --card-foreground: 120 20% 92%;
+    --popover: 0 0% 3%;
+    --popover-foreground: 120 20% 92%;
+    --primary: 142 60% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 7%;
+    --secondary-foreground: 120 20% 92%;
+    --muted: 0 0% 7%;
+    --muted-foreground: 120 10% 55%;
+    --accent: 90 50% 38%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 12%;
+    --input: 0 0% 12%;
+    --ring: 142 60% 45%;
+  }
+
+  .amoled.high-contrast {
+    --foreground: 0 0% 100%;
+    --muted-foreground: 0 0% 85%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .direction-rtl {
+    direction: rtl;
+  }
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* Smooth transitions for theme changes */
+*, *::before, *::after {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}

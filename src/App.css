@@ -1,0 +1,19 @@
+/* PlantLog App Styles */
+
+/* Prevent overscroll bounce on mobile */
+html, body {
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure full height layout */
+#root {
+  min-height: 100dvh;
+}
+
+/* Mobile-optimized bottom safe area */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  nav.fixed {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
