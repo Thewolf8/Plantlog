@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Leaf } from 'lucide-react';
 import { useI18n } from '@/i18n/I18nContext';
-import { cn } from '@/lib/utils';
 
 interface HeaderProps {
   title?: string;
@@ -11,35 +10,39 @@ interface HeaderProps {
 }
 
 export default function Header({ title, showBack, onBack, rightAction }: HeaderProps) {
-  const { t, isRTL } = useI18n();
+  const { isRTL } = useI18n();
 
   return (
-    <header className={cn(
-      "sticky top-0 z-40 border-b bg-background/95 backdrop-blur-md px-4 h-14 flex items-center",
-      isRTL ? 'flex-row-reverse' : ''
-    )}>
-      <div className="flex-1 flex items-center min-w-0">
+    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur-md px-4 h-14 flex items-center">
+      {/* Left slot */}
+      <div className="w-10 flex items-center">
         {showBack ? (
           <button
             onClick={onBack}
             className="p-2 -ml-2 rounded-lg hover:bg-muted transition-colors text-foreground"
+            aria-label="Back"
           >
-            <span className="text-lg">{isRTL ? '→' : '←'}</span>
+            <span className="text-lg leading-none">{isRTL ? '→' : '←'}</span>
           </button>
         ) : (
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-1.5">
             <Leaf className="w-5 h-5 text-primary" />
-            <span className="font-semibold text-sm">{t('appName')}</span>
           </Link>
         )}
       </div>
-      {title && (
-        <h1 className="absolute left-1/2 -translate-x-1/2 font-semibold text-sm truncate max-w-[50%] text-center">
-          {title}
-        </h1>
-      )}
-      <div className={cn("flex-1 flex items-center min-w-0", isRTL ? 'justify-start' : 'justify-end')}>
-        {rightAction}
+
+      {/* Center title */}
+      <div className="flex-1 flex items-center justify-center">
+        {title ? (
+          <h1 className="font-semibold text-sm truncate">{title}</h1>
+        ) : (
+          <span className="font-semibold text-sm">PlantLog</span>
+        )}
+      </div>
+
+      {/* Right slot */}
+      <div className="w-10 flex items-center justify-end">
+        {rightAction ?? null}
       </div>
     </header>
   );
