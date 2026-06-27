@@ -3,8 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useSettings } from '@/hooks/useSettings';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';import { useSettings } from '@/hooks/useSettings';
 import { useTheme } from '@/context/ThemeContext';
 import { useI18n } from '@/i18n/I18nContext';
 import Header from '@/components/Header';
@@ -118,7 +117,7 @@ export default function SettingsPage() {
                   <Zap className="w-4 h-4 text-muted-foreground" />
                   <div className="flex flex-col items-start">
                     <span>{t('themeAmoled')}</span>
-                    <span className="text-[10px] text-muted-foreground">Pure black — saves battery on OLED screens</span>
+                    <span className="text-[10px] text-muted-foreground">{t('amoledDescription')}</span>
                   </div>
                 </div>
                 <div className={cn(
@@ -142,7 +141,7 @@ export default function SettingsPage() {
               />
               <div>
                 <span className="text-sm font-medium">{t('highContrast')}</span>
-                <p className="text-[11px] text-muted-foreground">Increases contrast for outdoor readability</p>
+                <p className="text-[11px] text-muted-foreground">{t('highContrastDescription')}</p>
               </div>
             </label>
           </div>
@@ -153,17 +152,21 @@ export default function SettingsPage() {
           <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
             <Languages className="w-4 h-4" /> {t('language')}
           </div>
-          <div className="rounded-lg border bg-card p-3">
-            <Select value={language} onValueChange={handleLanguageChange}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="en">{t('langEnglish')}</SelectItem>
-                <SelectItem value="ar">{t('langArabic')}</SelectItem>
-                <SelectItem value="fr">{t('langFrench')}</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-3 gap-2">
+            {(['en', 'ar', 'fr'] as const).map((lang) => (
+              <button
+                key={lang}
+                onClick={() => handleLanguageChange(lang)}
+                className={cn(
+                  'rounded-xl border px-2 py-3 text-sm font-medium transition-all',
+                  language === lang
+                    ? 'border-primary bg-primary/10 text-primary'
+                    : 'border-border bg-card text-muted-foreground hover:text-foreground'
+                )}
+              >
+                {lang === 'en' ? '🇬🇧 English' : lang === 'ar' ? '🇸🇦 العربية' : '🇫🇷 Français'}
+              </button>
+            ))}
           </div>
         </section>
 

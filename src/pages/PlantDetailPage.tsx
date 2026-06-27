@@ -224,7 +224,7 @@ export default function PlantDetailPage() {
                   <div className="pt-4 space-y-3">
                     <textarea
                       className="w-full h-24 rounded-md border bg-background p-3 text-sm resize-none"
-                      placeholder="Write your observation..."
+                      placeholder={t('observationPlaceholder')}
                       value={observationText}
                       onChange={(e) => setObservationText(e.target.value)}
                     />
@@ -248,16 +248,27 @@ export default function PlantDetailPage() {
             </div>
           </TabsContent>
 
-          <TabsContent value="photos" className="mt-4">
-            <div className="mb-3">
+          <TabsContent value="photos" className="mt-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-muted-foreground">{t('addPhotoHint')}</p>
               <label className="cursor-pointer">
-                <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
-                <Button variant="outline" size="sm" className="text-xs" asChild>
-                  <span>{t('chooseFile')}</span>
-                </Button>
+                <input type="file" accept="image/*" multiple className="hidden" onChange={handlePhotoUpload} />
+                <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-1.5 text-xs font-medium hover:bg-muted transition-colors">
+                  <Plus className="w-3 h-3" /> {t('addPhoto')}
+                </span>
               </label>
             </div>
-            <PhotoGrid photos={photos} onDelete={deletePhoto} dateFormat={dateFormat} />
+            {photos.length === 0 ? (
+              <label className="cursor-pointer block">
+                <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
+                <div className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-muted rounded-lg gap-2 text-muted-foreground hover:border-primary/50 transition-colors">
+                  <Plus className="w-6 h-6 opacity-40" />
+                  <span className="text-sm">{t('tapToAddPhoto')}</span>
+                </div>
+              </label>
+            ) : (
+              <PhotoGrid photos={photos} onDelete={deletePhoto} dateFormat={dateFormat} />
+            )}
           </TabsContent>
 
           <TabsContent value="watering" className="space-y-4 mt-4">
@@ -335,7 +346,7 @@ export default function PlantDetailPage() {
               variant="destructive"
               className="w-full"
               onClick={() => {
-                if (window.confirm('Are you sure you want to delete this plant and all its data?')) {
+                if (window.confirm(t('deletePlantConfirm'))) {
                   deletePlant(plant.id);
                   navigate('/');
                 }

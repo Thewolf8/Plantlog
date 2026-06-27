@@ -21,7 +21,7 @@ const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export default function AddPlantPage() {
   const navigate = useNavigate();
-  const { addPlant } = usePlants();
+  const { addPlant, updatePlant } = usePlants();
   const { t } = useI18n();
 
   // ── identity ──
@@ -68,11 +68,11 @@ export default function AddPlantPage() {
   const isLastStep = stepIndex === steps.length - 1;
 
   const stepMeta: Record<StepId, { label: string; hint: string; icon: ReactNode }> = {
-    identity:    { label: t('stepIdentity'),    hint: 'Name your plant and set the key dates.',           icon: <Sprout className="w-4 h-4" /> },
+    identity:    { label: t('stepIdentity'),    hint: t('hintIdentity'),           icon: <Sprout className="w-4 h-4" /> },
     environment: { label: t('stepEnvironment'), hint: 'Select the harsh conditions this plant faces.',    icon: <TreePine className="w-4 h-4" /> },
-    schedule:    { label: t('stepSchedule'),    hint: 'Set a watering reminder. You can skip this step.', icon: <Droplets className="w-4 h-4" /> },
+    schedule:    { label: t('stepSchedule'),    hint: t('hintSchedule'), icon: <Droplets className="w-4 h-4" /> },
     lineage:     { label: t('stepLineage'),     hint: 'Is this plant grown from seeds of another plant?', icon: <Dna className="w-4 h-4" /> },
-    notes:       { label: t('stepTags'),        hint: 'Add notes, tags, and an optional cover photo.',   icon: <Tag className="w-4 h-4" /> },
+    notes:       { label: t('stepTags'),        hint: t('hintNotes'),   icon: <Tag className="w-4 h-4" /> },
   };
 
   const handlePhotoUpload = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -132,15 +132,12 @@ export default function AddPlantPage() {
         uploadedAt: new Date().toISOString(),
         tags: [],
       };
-      const existing = JSON.parse(localStorage.getItem('plantlog_photos') || '[]');
-      existing.push(photo);
-      localStorage.setItem('plantlog_photos', JSON.stringify(existing));
-      const plants = JSON.parse(localStorage.getItem('plantlog_plants') || '[]');
-      const idx = plants.findIndex((p: { id: string }) => p.id === plant.id);
-      if (idx !== -1) {
-        plants[idx].heroPhotoId = photoId;
-        localStorage.setItem('plantlog_plants', JSON.stringify(plants));
-      }
+      // Write photo to localStorage (useLocalStorage now writes synchronously so this is safe)
+      const existingPhotos = JSON.parse(localStorage.getItem('plantlog_photos') || '[]');
+      existingPhotos.push(photo);
+      localStorage.setItem('plantlog_photos', JSON.stringify(existingPhotos));
+      // Use the hook so React state stays in sync
+      updatePlant(plant.id, { heroPhotoId: photoId });
     }
 
     navigate(`/plant/${plant.id}`);
@@ -170,12 +167,12 @@ export default function AddPlantPage() {
         <Label className="flex items-center gap-1">
           {t('germinationDate')} <span className="text-muted-foreground text-xs">({t('optional')})</span>
         </Label>
-        <p className="text-xs text-muted-foreground">Date the seed germinated or the plant was grown from seed.</p>
+        <p className="text-xs text-muted-foreground">{t('germinationDateHint')}</p>
         <Input type="date" value={germinationDate} onChange={(e) => setGerminationDate(e.target.value)} />
       </div>
       <div className="space-y-1.5">
         <Label>{t('adoptionDate')} <span className="text-destructive">*</span></Label>
-        <p className="text-xs text-muted-foreground">The date you started caring for this plant. Used to calculate your care streak.</p>
+        <p className="text-xs text-muted-foreground">{t('adoptionDateHint')}</p>
         <Input type="date" value={adoptionDate} onChange={(e) => setAdoptionDate(e.target.value)} required />
       </div>
       <div className="rounded-lg border bg-card p-3 space-y-1">
@@ -187,7 +184,7 @@ export default function AddPlantPage() {
           />
           <div>
             <p className="text-sm font-medium">{t('isClimateDefiance')}</p>
-            <p className="text-xs text-muted-foreground">Enable this if you are growing this plant outside its native climate (e.g. tropical plant in a desert). Unlocks the Environment step.</p>
+            <p className="text-xs text-muted-foreground">{t('climateDefianceHint')}</p>
           </div>
         </label>
       </div>
@@ -196,7 +193,7 @@ export default function AddPlantPage() {
 
   const renderEnvironment = () => (
     <div className="space-y-4">
-      <p className="text-sm text-muted-foreground">Check all the harsh conditions this plant is dealing with in its current location.</p>
+      <p className="text-sm text-muted-foreground">{t('hintEnvironment')}</p>
       <ClimateProfiler selected={harshFactors} onChange={setHarshFactors} />
     </div>
   );
@@ -212,7 +209,7 @@ export default function AddPlantPage() {
           />
           <div>
             <p className="text-sm font-medium">{t('scheduleEnabled')}</p>
-            <p className="text-xs text-muted-foreground">Track how often you water this plant. You can log individual waterings without a schedule too.</p>
+            <p className="text-xs text-muted-foreground">{t('scheduleEnabledHint')}</p>
           </div>
         </label>
       </div>
@@ -292,8 +289,8 @@ export default function AddPlantPage() {
             className="mt-0.5"
           />
           <div>
-            <p className="text-sm font-medium">Generation 2+ plant</p>
-            <p className="text-xs text-muted-foreground">This plant was grown from seeds harvested from another plant in your journal. Enables lineage tracking (G1 → G2 → G3...).</p>
+            <p className="text-sm font-medium">{t('gen2Plant')}</p>
+            <p className="text-xs text-muted-foreground">{t('gen2PlantHint')}</p>
           </div>
         </label>
       </div>
@@ -302,17 +299,17 @@ export default function AddPlantPage() {
         <div className="space-y-4">
           <div className="space-y-1.5">
             <Label>{t('parentPlant')}</Label>
-            <p className="text-xs text-muted-foreground">Select the parent plant this was grown from.</p>
+            <p className="text-xs text-muted-foreground">{t('noneUnknown')}</p>
             <Select value={parentPlantId || 'none'} onValueChange={(v) => setParentPlantId(v === 'none' ? null : v)}>
-              <SelectTrigger><SelectValue placeholder="Select parent plant" /></SelectTrigger>
+              <SelectTrigger><SelectValue placeholder={t('noneUnknown')} /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="none">None / Unknown</SelectItem>
+                <SelectItem value="none">{t('noneUnknown')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-1.5">
             <Label>{t('seedHarvestDate')}</Label>
-            <p className="text-xs text-muted-foreground">When were the seeds harvested from the parent plant?</p>
+            <p className="text-xs text-muted-foreground">{t('seedHarvestDateHint')}</p>
             <Input type="date" value={seedHarvestDate} onChange={(e) => setSeedHarvestDate(e.target.value)} />
           </div>
         </div>
@@ -328,16 +325,16 @@ export default function AddPlantPage() {
           className="w-full h-24 rounded-md border bg-background p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          placeholder="Any initial observations, source, or context..."
+          placeholder={t('notesPlaceholder')}
         />
       </div>
       <div className="space-y-1.5">
         <Label>{t('tags')}</Label>
-        <p className="text-xs text-muted-foreground">Comma-separated. Example: flowering, new_shoot, tip_burn</p>
+        <p className="text-xs text-muted-foreground">{t('tagsHint')}</p>
         <Input value={tags} onChange={(e) => setTags(e.target.value)} placeholder="flowering, new_shoot" />
       </div>
       <div className="space-y-1.5">
-        <Label>Cover Photo <span className="text-muted-foreground text-xs">({t('optional')})</span></Label>
+        <Label>{t('coverPhoto')} <span className="text-muted-foreground text-xs">({t('optional')})</span></Label>
         <label className="cursor-pointer block">
           <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
           <div className="border-2 border-dashed border-muted rounded-lg overflow-hidden hover:border-primary/50 transition-colors">
@@ -346,13 +343,13 @@ export default function AddPlantPage() {
                 <img src={heroPhotoBase64} alt="Preview" className="w-full h-40 object-cover" />
                 <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                   <Camera className="w-8 h-8 text-white" />
-                  <span className="text-white text-sm ms-2">Change photo</span>
+                  <span className="text-white text-sm ms-2">{t('changePhoto')}</span>
                 </div>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-28 gap-2 text-muted-foreground">
                 <Camera className="w-8 h-8 opacity-40" />
-                <span className="text-sm">Tap to add a cover photo</span>
+                <span className="text-sm">{t('tapToAddPhoto')}</span>
               </div>
             )}
           </div>
