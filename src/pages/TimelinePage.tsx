@@ -12,7 +12,7 @@ export default function TimelinePage() {
   const { entries } = useJournal();
   const { plants } = usePlants();
   const { settings } = useSettings();
-  const { t, isRTL } = useI18n();
+  const { t } = useI18n();
 
   const [plantFilter, setPlantFilter] = useState<string>('all');
   const [kindFilter, setKindFilter] = useState<string>('all');
@@ -26,7 +26,7 @@ export default function TimelinePage() {
   }, [entries, plantFilter, kindFilter]);
 
   return (
-    <div className={cn('pb-24', isRTL && 'direction-rtl')}>
+    <div className={'pb-24'}>
       <Header title={t('navTimeline')} />
       <div className="p-4 space-y-4">
         <div className="flex gap-2">

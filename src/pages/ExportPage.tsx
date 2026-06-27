@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, type ChangeEvent, type DragEvent } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 
 export default function ExportPage() {
   const { settings, updateExportPreferences } = useSettings();
-  const { t, isRTL } = useI18n();
+  const { t } = useI18n();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [importResult, setImportResult] = useState<{ success: boolean; message: string } | null>(null);
   const [dragOver, setDragOver] = useState(false);
@@ -37,7 +37,7 @@ export default function ExportPage() {
     });
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
@@ -47,7 +47,7 @@ export default function ExportPage() {
     reader.readAsText(file);
   };
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleDrop = (e: DragEvent) => {
     e.preventDefault();
     setDragOver(false);
     const file = e.dataTransfer.files?.[0];
@@ -60,7 +60,7 @@ export default function ExportPage() {
   };
 
   return (
-    <div className={cn('pb-24', isRTL && 'direction-rtl')}>
+    <div className={'pb-24'}>
       <Header title={t('navExport')} />
       <div className="p-4 space-y-6 max-w-lg mx-auto">
         {/* Export options */}

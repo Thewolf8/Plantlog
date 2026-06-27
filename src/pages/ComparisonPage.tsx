@@ -18,7 +18,7 @@ export default function ComparisonPage() {
   const { plants } = usePlants();
   const allPhotos = usePhotos();
   const { settings } = useSettings();
-  const { t, isRTL } = useI18n();
+  const { t } = useI18n();
 
   const [plantA, setPlantA] = useState(id || 'all');
   const [plantB, setPlantB] = useState('all');
@@ -67,7 +67,7 @@ export default function ComparisonPage() {
   };
 
   return (
-    <div className={cn('pb-8', isRTL && 'direction-rtl')}>
+    <div className={'pb-8'}>
       <Header title={t('comparePhotos')} showBack onBack={() => navigate(`/plant/${id}`)} />
       <div className="p-4 space-y-4">
         <div className="flex gap-2 items-center">

@@ -22,7 +22,7 @@ export default function TagsPage() {
   const { photos, getPhotosByTag } = usePhotos();
   const { entries } = useJournal();
   const { settings } = useSettings();
-  const { t, isRTL } = useI18n();
+  const { t } = useI18n();
 
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [showCreate, setShowCreate] = useState(false);
@@ -59,7 +59,7 @@ export default function TagsPage() {
   };
 
   return (
-    <div className={cn('pb-24', isRTL && 'direction-rtl')}>
+    <div className={'pb-24'}>
       <Header title={t('navTags')} />
       <div className="p-4 space-y-4">
         {/* Tag list */}

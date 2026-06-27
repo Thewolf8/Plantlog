@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -67,7 +67,7 @@ export default function AddPlantPage() {
   const currentStep = steps[stepIndex];
   const isLastStep = stepIndex === steps.length - 1;
 
-  const stepMeta: Record<StepId, { label: string; hint: string; icon: React.ReactNode }> = {
+  const stepMeta: Record<StepId, { label: string; hint: string; icon: ReactNode }> = {
     identity:    { label: t('stepIdentity'),    hint: 'Name your plant and set the key dates.',           icon: <Sprout className="w-4 h-4" /> },
     environment: { label: t('stepEnvironment'), hint: 'Select the harsh conditions this plant faces.',    icon: <TreePine className="w-4 h-4" /> },
     schedule:    { label: t('stepSchedule'),    hint: 'Set a watering reminder. You can skip this step.', icon: <Droplets className="w-4 h-4" /> },
@@ -75,7 +75,7 @@ export default function AddPlantPage() {
     notes:       { label: t('stepTags'),        hint: 'Add notes, tags, and an optional cover photo.',   icon: <Tag className="w-4 h-4" /> },
   };
 
-  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const b64 = await compressImage(file, 800, 0.8);

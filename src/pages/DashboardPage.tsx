@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Sprout, Droplets, Sun, Thermometer } from 'lucide-react';
-
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { usePlants } from '@/hooks/usePlants';
 import { useJournal } from '@/hooks/useJournal';
 import { usePhotos } from '@/hooks/usePhotos';

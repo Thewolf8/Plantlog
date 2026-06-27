@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -15,7 +15,7 @@ import type { Theme } from '@/types/settings';
 export default function SettingsPage() {
   const { settings, updateSettings, updateNotifications } = useSettings();
   const { theme, setTheme, highContrast, setHighContrast } = useTheme();
-  const { t, isRTL, language, setLanguage } = useI18n();
+  const { t, language, setLanguage } = useI18n();
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   const handleClearAll = () => {
@@ -34,7 +34,7 @@ export default function SettingsPage() {
   // "Dark" is active when theme is 'dark' OR 'amoled'
   const isDarkFamily = theme === 'dark' || theme === 'amoled';
 
-  const themeButtons: { value: Theme; label: string; icon: React.ReactNode }[] = [
+  const themeButtons: { value: Theme; label: string; icon: ReactNode }[] = [
     { value: 'light',  label: t('themeLight'),  icon: <Sun  className="w-4 h-4" /> },
     { value: 'dark',   label: t('themeDark'),   icon: <Moon className="w-4 h-4" /> },
     { value: 'system', label: t('themeSystem'), icon: <Monitor className="w-4 h-4" /> },
@@ -54,7 +54,7 @@ export default function SettingsPage() {
   const activeTab = isDarkFamily ? 'dark' : theme;
 
   return (
-    <div className={cn('pb-24', isRTL && 'direction-rtl')}>
+    <div className={'pb-24'}>
       <Header title={t('navSettings')} />
       <div className="p-4 space-y-6 max-w-lg mx-auto">
 
