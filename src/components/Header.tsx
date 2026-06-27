@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Leaf } from 'lucide-react';
 import { useI18n } from '@/i18n/I18nContext';
@@ -6,7 +7,7 @@ interface HeaderProps {
   title?: string;
   showBack?: boolean;
   onBack?: () => void;
-  rightAction?: React.ReactNode;
+  rightAction?: ReactNode;
 }
 
 export default function Header({ title, showBack, onBack, rightAction }: HeaderProps) {
@@ -33,11 +34,10 @@ export default function Header({ title, showBack, onBack, rightAction }: HeaderP
 
       {/* Center title */}
       <div className="flex-1 flex items-center justify-center">
-        {title ? (
-          <h1 className="font-semibold text-sm truncate">{title}</h1>
-        ) : (
-          <span className="font-semibold text-sm">PlantLog</span>
-        )}
+        {title
+          ? <h1 className="font-semibold text-sm truncate">{title}</h1>
+          : <span className="font-semibold text-sm">PlantLog</span>
+        }
       </div>
 
       {/* Right slot */}
